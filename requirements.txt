@@ -1,0 +1,7 @@
+praw
+playwright
+beautifulsoup4
+requests
+openai
+# Add Gemini SDK if available, otherwise placeholder
+tqdm 
