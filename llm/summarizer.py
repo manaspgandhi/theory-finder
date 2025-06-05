@@ -8,7 +8,7 @@ def summarize_theories(theories: List[Dict], query: str) -> str:
     return "Summary goes here." 
 
 # CURL COMMAND
-# curl "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${AIzaSyD9Vqbdbb62l_pvS2ZpV3RBxLSmnKF-oGM}" \
+# curl "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${}" \
 #   -H 'Content-Type: application/json' \
 #   -X POST \
 #   -d '{
