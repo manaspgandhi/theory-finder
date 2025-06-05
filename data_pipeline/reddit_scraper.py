@@ -25,12 +25,13 @@ api_key = os.getenv("BROWSERBASE_API_KEY")
 
 bb = Browserbase(api_key=api_key)
 
-class CustomRemoteConnection(RemoteConnection):
+class BrowserbaseConnection(RemoteConnection):
     _signing_key = None
 
-    def __init__(self, remote_server_addr: str, signing_key: str):
+    def __init__(self, session_id, remote_server_addr: str, signing_key: str):
+        self.session_id = session_id
         super().__init__(remote_server_addr)
-        self._signing_key = signing_key
+        
 
     def get_remote_connection_headers(self, parsed_url, keep_alive=False):
         headers = super().get_remote_connection_headers(parsed_url, keep_alive)
@@ -40,11 +41,12 @@ class CustomRemoteConnection(RemoteConnection):
 
 def run():
     session = bb.sessions.create(project_id=os.environ["BROWSERBASE_PROJECT_ID"])
-    custom_conn = CustomRemoteConnection(session.selenium_remote_url, session.signing_key)
-    options = webdriver.ChromeOptions()
-    driver = webdriver.Remote(custom_conn, options=options)
-    query = "severance theories after:2025-03-01"
+    custom_conn = BrowserbaseConnection(session.id, session.selenium_remote_url)
+    driver = webdriver.Remote(custom_conn, options=webdriver.ChromeOptions())
 
+    #set up query
+    query = "severance theories after:2025-03-01"
+    
     #go to google first
     driver.get("https://www.google.com")
     get_title = driver.title
@@ -53,3 +55,42 @@ def run():
     driver.quit()
 
 run()
+
+"""
+import os
+from selenium import webdriver
+from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.remote.remote_connection import RemoteConnection
+from browserbase import Browserbase
+
+class BrowserbaseConnection(RemoteConnection):
+    \"""Manage a single session with Browserbase.\"""
+
+    def __init__(self, session_id, *args, **kwargs):
+        self.session_id = session_id
+        super().__init__(*args, **kwargs)
+
+    def get_remote_connection_headers(self, parsed_url, keep_alive=False):
+        headers = super().get_remote_connection_headers(parsed_url, keep_alive)
+        headers.update({
+            "x-bb-api-key": os.environ["BROWSERBASE_API_KEY"],
+            "session-id": self.session_id,
+        })
+        return headers
+
+# Create a session
+bb = Browserbase(api_key=os.environ["BROWSERBASE_API_KEY"])
+session = bb.sessions.create(
+    project_id=os.environ["BROWSERBASE_PROJECT_ID"]
+)
+
+# Connect using custom connection class
+connection = BrowserbaseConnection(
+    session.id,
+    session.selenium_remote_url
+)
+driver = webdriver.Remote(
+    command_executor=connection,
+    options=webdriver.ChromeOptions()
+)
+"""
