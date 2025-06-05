@@ -11,12 +11,19 @@ A research agent that, given a query about a TV show, autonomously searches the 
 - `utils/` — Helper utilities
 
 ## Getting Started
+
 1. Install dependencies: `pip install -r requirements.txt`
 2. Set up API keys for Reddit and LLMs
 3. Run the CLI: `python interface/cli.py`
 
 ## TODO
+
 - Implement Reddit and Quora scrapers
 - Integrate Gemini or OpenAI for summarization
 - Add more data sources
 - Improve agent logic
+
+## Installations:
+
+- browserbase
+- requests
