@@ -39,15 +39,17 @@ class CustomRemoteConnection(RemoteConnection):
 
 
 def run():
-  session = bb.sessions.create(project_id=os.environ["BROWSERBASE_PROJECT_ID"])
-  custom_conn = CustomRemoteConnection(session.selenium_remote_url, session.signing_key)
-  options = webdriver.ChromeOptions()
-  driver = webdriver.Remote(custom_conn, options=options)
-  query = "severance theories after:2025-03-01"
-  driver.get("https://news.ycombinator.com")
-  get_title = driver.title
-  print(get_title)
-  # Make sure to quit the driver so your session is ended!
-  driver.quit()
+    session = bb.sessions.create(project_id=os.environ["BROWSERBASE_PROJECT_ID"])
+    custom_conn = CustomRemoteConnection(session.selenium_remote_url, session.signing_key)
+    options = webdriver.ChromeOptions()
+    driver = webdriver.Remote(custom_conn, options=options)
+    query = "severance theories after:2025-03-01"
+
+    #go to google first
+    driver.get("https://www.google.com")
+    get_title = driver.title
+    print(get_title)
+    # Make sure to quit the driver so your session is ended!
+    driver.quit()
 
 run()
